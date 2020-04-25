@@ -24,7 +24,7 @@ public class Unidad1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        vel = 2f;
+        vel = 3f;
         vidas = 3;
         distancia_punto = 5f;
         esta_viva = true;

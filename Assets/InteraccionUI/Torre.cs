@@ -5,6 +5,7 @@ using UnityEngine;
 public class Torre : MonoBehaviour
 {
     private GameObject enemigo;
+   // private GameObject enemigo2;
     private bool esta_activa;
     private float distancia_umbral;
     private float tiempo_disparo;
@@ -35,6 +36,18 @@ public class Torre : MonoBehaviour
         {
             tiempo_disparo -= Time.deltaTime;
         }
+
+        /*Enemigo2 = BuscarEnemigoCercano();
+        if (Enemigo2 != null && tiempo_disparo <= 0)
+        {
+            Disparar();
+            Debug.DrawLine(this.transform.position, enemigo.transform.position, Color.yellow);
+            tiempo_disparo = 1f;
+        }
+        else
+        {
+            tiempo_disparo -= Time.deltaTime;
+        }*/
 
     }
 
@@ -82,6 +95,22 @@ public class Torre : MonoBehaviour
         return null;
     }
 
+    /*GameObject BuscarEnemigoCercano2()
+    {
+        ArrayList enemigos2 = PoolingUnidades.unidades2;
+        GameObject temp;
+        foreach (Object item in enemigos2)
+        {
+            temp = (GameObject)item;
+            if (Vector3.Distance(temp.transform.position, this.transform.position) < distancia_umbral)
+            {
+                return temp;
+            }
+        }
+        return null;
+    }*/
+
     public bool Esta_activa { get => esta_activa; set => esta_activa = value; }
     public GameObject Enemigo { get => enemigo; set => enemigo = value; }
+   //public GameObject Enemigo2 { get => enemigo2; set => enemigo2 = value; }
 }
