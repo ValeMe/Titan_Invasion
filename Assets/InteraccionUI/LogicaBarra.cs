@@ -8,7 +8,7 @@ public class LogicaBarra : MonoBehaviour
     private GameObject barra_verde;
     [SerializeField]
     private GameObject barra_roja;
-    //private float escala_actual;// = .001f
+    private float escala_actual = 15f;
     private SpriteRenderer sr;
 
     // Use this for initialization

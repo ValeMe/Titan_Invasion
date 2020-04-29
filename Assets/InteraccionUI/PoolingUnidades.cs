@@ -6,25 +6,22 @@ public class PoolingUnidades : MonoBehaviour
 {
 
     public static ArrayList unidades;
-    public static ArrayList unidades2;
 
     // Use this for initialization
     void Start()
     {
         unidades = new ArrayList();
-        unidades2 = new ArrayList();
         CrearPoolingUnidades();
         PosicionarUnidades();
-        PosicionarUnidades2();
     }
 
     public void CrearPoolingUnidades()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             CrearUnidad("VillanoAstronauta");
             CrearUnidad("VillanoAstronauta2");
-            CrearUnidad2("VillanoAstronauta3");
+            CrearUnidad("VillanoAstronauta3");
         }
 
 
@@ -35,6 +32,7 @@ public class PoolingUnidades : MonoBehaviour
         GameObject unidad = GameObject.Find(nombre);
         GameObject temp;
 
+
          temp = (GameObject)Instantiate(unidad, Vector3.zero, Quaternion.identity);
 
         if (!unidades.Contains(unidad))
@@ -44,42 +42,24 @@ public class PoolingUnidades : MonoBehaviour
         unidades.Add(temp);
 
     }
-    public void CrearUnidad2(string nombre) //usar 2 arraylist
-    {
-        GameObject unidad2 = GameObject.Find(nombre);
-        GameObject temp;
-
-        temp = (GameObject)Instantiate(unidad2, Vector3.zero, Quaternion.identity);
-
-        if (!unidades2.Contains(unidad2))
-        {
-            unidades2.Add(unidad2);
-        }
-        unidades2.Add(temp);
-
-    }
 
 
     public void PosicionarUnidades()
     {
-        Vector3 incremento = new Vector3(1, 0);
-        Vector3 posicion_actual = new Vector3(-42, 46);
+        Vector3 incremento = new Vector3(0, 1);
+        Vector3 posicion_actual = new Vector3(0, 4);
+        Vector3[] posiciones = new Vector3[4];
 
-        foreach(GameObject item in unidades)
+        posiciones[0] = new Vector3(-37.3f, 49.4f); 
+        posiciones[1] = new Vector3(9f, 49.12f);   
+        posiciones[2] = new Vector3(-62.3f, -15.7f); 
+
+        int cont = 0;
+
+        foreach (GameObject item in unidades)
         {
             item.transform.position = posicion_actual;
-            posicion_actual = posicion_actual + incremento;
-        }
-    }
-    public void PosicionarUnidades2()
-    {
-        Vector3 incremento = new Vector3(1, 0);
-        Vector3 posicion_actual = new Vector3(-65, -5);
-
-        foreach(GameObject item in unidades2)
-        {
-            item.transform.position = posicion_actual;
-            posicion_actual = posicion_actual + incremento;
+            posicion_actual = posiciones [cont++];
         }
     }
 

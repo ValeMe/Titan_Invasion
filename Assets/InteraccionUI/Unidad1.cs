@@ -2,67 +2,86 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unidad1 : MonoBehaviour
+public class Unidad1 : MonoBehaviour//, IControlable
 {
     [SerializeField]
-    public GameObject ruta;
+    private GameObject ruta;
+    [SerializeField]
+    private float vel;
+    [SerializeField]
+    private int vidas;
+    [SerializeField]
+    private int valor_muerte;
     private int indice;
     private Vector2 posicion_inicial;
     private Transform posicion_siguiente;
     private Transform posicion_actual;
-    public float vel;
     private float distancia_punto;
     private bool esta_viva;
     private float tiempo;
-    private int vidas;
+    private float delta_vida;
     private Vector3 posicion_muerte;
     private Animator controlador;
+    private LogicaBarra lb;
+    private Hud hud;
 
-    
 
 
     // Start is called before the first frame update
     void Start()
     {
-        vel = 3f;
-        vidas = 3;
-        distancia_punto = 5f;
+        vel = 2f;
+        delta_vida = 1f / vidas;
+        distancia_punto = .1f;
         esta_viva = true;
         posicion_inicial = this.transform.position;
         posicion_siguiente = ruta.transform.GetChild(0);
         controlador = this.GetComponent<Animator>();
+        lb = this.GetComponent<LogicaBarra>(); 
     }
 
     // Update is called once per frame
     void Update()
-    {
-        Vector3 dir;
-
-        if (esta_viva)
-        {
-            //dir = posicion_siguiente - this.transform.position;
-            //dir.z = 0;
-            transform.position = Vector2.MoveTowards(transform.position, posicion_siguiente.position, vel * Time.deltaTime);
-            //this.transform.position += dir * vel * Time.deltaTime;
-
-            if (Vector2.Distance(transform.position, posicion_siguiente.position) < distancia_punto)
+    {    hud = Hud.GetInstance();
+        if (EsActualizable())
             {
-                if (indice + 1 < ruta.transform.childCount)
+                
+                if (esta_viva)
                 {
-                    indice++;
-                    posicion_actual = posicion_siguiente;
-                    posicion_siguiente = ruta.transform.GetChild(indice);
-                    CambiarPosicion();
+                    //dir = posicion_siguiente - this.transform.position;
+                    //dir.z = 0;
+                    transform.position = Vector2.MoveTowards(transform.position, posicion_siguiente.position, vel * Time.deltaTime);
+                    //this.transform.position += dir * vel * Time.deltaTime;
+
+                    if (Vector2.Distance(transform.position, posicion_siguiente.position) < distancia_punto)
+                    {
+                        if (indice + 1 < ruta.transform.childCount)
+                        {
+                            indice++;
+                            posicion_actual = posicion_siguiente;
+                            posicion_siguiente = ruta.transform.GetChild(indice);
+                            CambiarPosicion();
+                        }
+                        else
+                        {
+                            indice = 0;
+                            this.transform.position = posicion_inicial;
+                            posicion_siguiente = ruta.transform.GetChild(0);
+                            posicion_actual = null;
+                        }
+                    }
                 }
-                else
-                {
-                    indice = 0;
-                    this.transform.position = posicion_inicial;
-                    posicion_siguiente = ruta.transform.GetChild(0);
-                    posicion_actual = null;
-                }
+            else
+            {
+                Posicion_muerte = this.transform.position;
+                this.transform.position = posicion_inicial;
             }
         }
+
+        
+       // Vector3 dir;
+
+        
     }
 
 
@@ -99,14 +118,35 @@ public class Unidad1 : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D otro)
     {
-        if (otro.gameObject.tag == "bala")
+        Bala bala;
+        if(vidas > 0)
         {
-            Destroy(otro.gameObject);
+            if (otro.gameObject.tag == "bala")
+            {
+                bala = otro.gameObject.GetComponent<Bala>();
+                bala.Disparada = false;
+
+                if(--vidas == 0)
+                {
+                    esta_viva = false;
+                    //Debug.Log("Se Murio la unidad");
+                    Hud.ActualizarMoneda(valor_muerte);
+                }
+                else
+                {
+                    lb.ModificarBarra(delta_vida);
+                }
+            }
         }
+        
+    }
+
+    public bool EsActualizable()
+    {
+        return hud.Modo_ejecucion == Hud.EJECUCION;
     }
 
 
-
     public bool Esta_viva { get => esta_viva; set => esta_viva = value; }
-
+    public Vector3 Posicion_muerte { get => posicion_muerte; set => posicion_muerte = value; }
 }

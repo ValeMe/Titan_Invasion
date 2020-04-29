@@ -36,7 +36,6 @@ public class Torre : MonoBehaviour
         {
             tiempo_disparo -= Time.deltaTime;
         }
-
         /*Enemigo2 = BuscarEnemigoCercano();
         if (Enemigo2 != null && tiempo_disparo <= 0)
         {
